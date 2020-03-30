@@ -12,45 +12,6 @@ Base URLs:
 
 <h1 id="analytic-toolkit-rest-api-estimator">estimator</h1>
 
-## get status
-
-<a id="opIdget status"></a>
-
-`GET /estimator/status`
-
-*Return the current status computed from all estimators*
-
-> Example responses
-
-> 200 Response
-
-```json
-{
-  "status": "Warn",
-  "timeslot": 123456789
-}
-```
-
-> default Response
-
-```json
-{
-  "code": "500",
-  "message": "Internal application error"
-}
-```
-
-<h3 id="get-status-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Expected response to a valid request|[EstimatorSummary](#schemaestimatorsummary)|
-|default|Default|unexpected error|[Error](#schemaerror)|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
 ## get estimator parameters
 
 <a id="opIdget estimator parameters"></a>
@@ -239,6 +200,7 @@ This operation does not require authentication
 [
   {
     "node-id": "string",
+    "timeslot": 0,
     "tags": [
       "string"
     ],
@@ -246,7 +208,7 @@ This operation does not require authentication
     "use-case": [
       {
         "id": "string",
-        "status": "string"
+        "status": "BaU"
       }
     ]
   }
@@ -315,6 +277,122 @@ This operation does not require authentication
 This operation does not require authentication
 </aside>
 
+## delete all use ndoes
+
+<a id="opIddelete all use ndoes"></a>
+
+`DELETE /nodes`
+
+*Remove all nodes from the list of managed nodes*
+
+> Example responses
+
+> default Response
+
+```json
+{
+  "code": "500",
+  "message": "Internal application error"
+}
+```
+
+<h3 id="delete-all-use-ndoes-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Expected response to a valid request|None|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## filter nodes by status
+
+<a id="opIdfilter nodes by status"></a>
+
+`GET /nodes/status`
+
+*Get list of nodes having the given status*
+
+<h3 id="filter-nodes-by-status-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|status|query|[Status](#schemastatus)|true|none|
+
+#### Enumerated Values
+
+|Parameter|Value|
+|---|---|
+|status|BaU|
+|status|Warn|
+|status|Alarm|
+|status|Undefined|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "node-id": "string",
+    "timeslot": 0,
+    "tags": [
+      "string"
+    ],
+    "tracked": true,
+    "use-case": [
+      {
+        "id": "string",
+        "status": "BaU"
+      }
+    ]
+  }
+]
+```
+
+<h3 id="filter-nodes-by-status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Expected response to a valid request|[NodeStatusList](#schemanodestatuslist)|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get summarized status
+
+<a id="opIdget summarized status"></a>
+
+`GET /nodes/summarizedstatus`
+
+*Return the worst status across all nodes and use-cases*
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "timeslot": 0,
+  "status": "BaU"
+}
+```
+
+<h3 id="get-summarized-status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Expected response to a valid request|[NodesSummarizedStatus](#schemanodessummarizedstatus)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 ## get node by id
 
 <a id="opIdget node by id"></a>
@@ -336,6 +414,7 @@ This operation does not require authentication
 ```json
 {
   "node-id": "string",
+  "timeslot": 0,
   "tags": [
     "string"
   ],
@@ -343,7 +422,7 @@ This operation does not require authentication
   "use-case": [
     {
       "id": "string",
-      "status": "string"
+      "status": "BaU"
     }
   ]
 }
@@ -596,6 +675,48 @@ This operation does not require authentication
 ```
 
 <h3 id="manage-a-new-use-case-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Expected response to a valid request|[UseCase](#schemausecase)|
+|default|Default|unexpected error|[Error](#schemaerror)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## delete all use cases
+
+<a id="opIddelete all use cases"></a>
+
+`DELETE /use-cases`
+
+*Remove all use-cases from the managed use-cases*
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "uc-id": "string",
+  "tags": [
+    "string"
+  ],
+  "adaptation": "string",
+  "bau": {
+    "samples": 0,
+    "threshold": 0,
+    "threshold-type": "string"
+  },
+  "warning": {
+    "samples": 0,
+    "hysteresis": "string"
+  }
+}
+```
+
+<h3 id="delete-all-use-cases-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -1032,30 +1153,6 @@ This operation does not require authentication
 |name|string|false|none|none|
 |tag|string|false|none|none|
 
-<h2 id="tocS_EstimatorDetailList">EstimatorDetailList</h2>
-<!-- backwards compatibility -->
-<a id="schemaestimatordetaillist"></a>
-<a id="schema_EstimatorDetailList"></a>
-<a id="tocSestimatordetaillist"></a>
-<a id="tocsestimatordetaillist"></a>
-
-```json
-[
-  {
-    "id": 0,
-    "name": "string",
-    "tag": "string"
-  }
-]
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[EstimatorDetail](#schemaestimatordetail)]|false|none|none|
-
 <h2 id="tocS_NodeStatusList">NodeStatusList</h2>
 <!-- backwards compatibility -->
 <a id="schemanodestatuslist"></a>
@@ -1067,6 +1164,7 @@ This operation does not require authentication
 [
   {
     "node-id": "string",
+    "timeslot": 0,
     "tags": [
       "string"
     ],
@@ -1074,7 +1172,7 @@ This operation does not require authentication
     "use-case": [
       {
         "id": "string",
-        "status": "string"
+        "status": "BaU"
       }
     ]
   }
@@ -1098,6 +1196,7 @@ This operation does not require authentication
 ```json
 {
   "node-id": "string",
+  "timeslot": 0,
   "tags": [
     "string"
   ],
@@ -1105,7 +1204,7 @@ This operation does not require authentication
   "use-case": [
     {
       "id": "string",
-      "status": "string"
+      "status": "BaU"
     }
   ]
 }
@@ -1117,11 +1216,12 @@ This operation does not require authentication
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |node-id|string|true|none|none|
+|timeslot|integer(int32)|false|none|none|
 |tags|[string]|false|none|none|
 |tracked|boolean|false|none|none|
 |use-case|[object]|false|none|none|
 |» id|string|false|none|none|
-|» status|string|false|none|none|
+|» status|[Status](#schemastatus)|false|none|none|
 
 <h2 id="tocS_NodeConfig">NodeConfig</h2>
 <!-- backwards compatibility -->
@@ -1230,12 +1330,12 @@ This operation does not require authentication
 |» samples|integer(int32)|false|none|none|
 |» hysteresis|string|false|none|none|
 
-<h2 id="tocS_EstimatorSummary">EstimatorSummary</h2>
+<h2 id="tocS_NodesSummarizedStatus">NodesSummarizedStatus</h2>
 <!-- backwards compatibility -->
-<a id="schemaestimatorsummary"></a>
-<a id="schema_EstimatorSummary"></a>
-<a id="tocSestimatorsummary"></a>
-<a id="tocsestimatorsummary"></a>
+<a id="schemanodessummarizedstatus"></a>
+<a id="schema_NodesSummarizedStatus"></a>
+<a id="tocSnodessummarizedstatus"></a>
+<a id="tocsnodessummarizedstatus"></a>
 
 ```json
 {

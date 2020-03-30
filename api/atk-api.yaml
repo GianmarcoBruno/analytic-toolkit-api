@@ -7,28 +7,6 @@ info:
 servers:
   - url: http://localhost:8080/v1
 paths:
-  /estimator/status:
-    get:
-      summary: Return the current status computed from all estimators
-      operationId: get status
-      tags:
-        - estimator
-      responses:
-        '200':
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EstimatorSummary"
-              example:
-                status: "Warn"
-                timeslot: 123456789
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /estimator/params:
     get:
       summary: Get the ARIMA parameters used by the estimators
@@ -153,7 +131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"              
+                $ref: "#/components/schemas/Error"
     post:
       summary: Manage a new node
       operationId: manage new node
@@ -183,7 +161,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"              
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Remove all nodes from the list of managed nodes
+      operationId: delete all use ndoes
+      tags:
+        - nodes
+      responses:
+        '200':
+          description: Expected response to a valid request
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /nodes/status:
+    get:
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/Status'
+          required: true
+      summary: Get list of nodes having the given status 
+      operationId: filter nodes by status
+      tags:
+        - nodes
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeStatusList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /nodes/summarizedstatus:
+    get:
+      summary: Return the worst status across all nodes and use-cases
+      operationId: get summarized status
+      tags:
+        - nodes
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodesSummarizedStatus"
   /nodes/{Id}:
     get:
       summary: Detailed information for a specific node
@@ -332,6 +362,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"              
+    delete:
+      summary: Remove all use-cases from the managed use-cases
+      operationId: delete all use cases
+      tags:
+        - use-cases
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UseCase"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /use-cases/{Id}:
     get:
       summary: Detailed information for a specific use-case
@@ -588,10 +636,6 @@ components:
           type: string
         tag:
           type: string
-    EstimatorDetailList:
-      type: array
-      items:
-        $ref: '#/components/schemas/EstimatorDetail'
     NodeStatusList:
       type: array
       items:
@@ -603,6 +647,9 @@ components:
       properties:
         node-id:
           type: string
+        timeslot:
+          type: integer
+          format: int32
         tags:
           type: array
           items:
@@ -617,7 +664,7 @@ components:
               id:
                 type: string
               status:
-                type: string
+                $ref: '#/components/schemas/Status'
     NodeConfig:
       type: object
       required:
@@ -671,7 +718,7 @@ components:
               format: int32
             hysteresis:
               type: string
-    EstimatorSummary:
+    NodesSummarizedStatus:
       type: object
       properties:
         timeslot:
