@@ -706,6 +706,7 @@ estimator status including correlations
 
 ```json
 {
+  "time": 1600034400,
   "network-status": "BAU",
   "correlation-type-status": [
     {
@@ -1487,7 +1488,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[HistoryPoint](#schemahistorypoint)]|false|none|none|
-|» time|integer(int32)|false|none|none|
+|» time|[Timestamp](#schematimestamp)(int32)|false|none|seconds since epoch|
 |» value|[Status](#schemastatus)|false|none|none|
 
 #### Enumerated Values
@@ -2015,6 +2016,7 @@ and
 
 ```json
 {
+  "time": 1600034400,
   "network-status": "BAU",
   "correlation-type-status": [
     {
@@ -2048,6 +2050,7 @@ return the status computed across all node types and areas, for each use-case.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|time|[Timestamp](#schematimestamp)|false|none|seconds since epoch|
 |network-status|[Status](#schemastatus)|false|none|none|
 |correlation-type-status|[[CorrelationStatusByType](#schemacorrelationstatusbytype)]|false|none|[correlationstatus computed across all node types]|
 |correlation-area-status|[[CorrelationStatusByArea](#schemacorrelationstatusbyarea)]|false|none|[correlationstatus computed across all areas]|
@@ -2246,6 +2249,26 @@ and
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|time|integer(int32)|false|none|none|
+|time|[Timestamp](#schematimestamp)|false|none|seconds since epoch|
 |value|[Status](#schemastatus)|false|none|none|
+
+<h2 id="tocS_Timestamp">Timestamp</h2>
+<!-- backwards compatibility -->
+<a id="schematimestamp"></a>
+<a id="schema_Timestamp"></a>
+<a id="tocStimestamp"></a>
+<a id="tocstimestamp"></a>
+
+```json
+1600034400
+
+```
+
+seconds since epoch
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|integer(int32)|false|none|seconds since epoch|
 

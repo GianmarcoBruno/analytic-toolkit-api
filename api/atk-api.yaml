@@ -1074,6 +1074,8 @@ components:
       type: object
       description: return the status computed across all node types and areas, for each use-case.
       properties:
+        time:
+          $ref: '#/components/schemas/Timestamp'
         network-status:
           $ref: "#/components/schemas/Status"
         correlation-type-status:
@@ -1155,8 +1157,12 @@ components:
       type: object
       properties:
         time:
-          type: integer
-          format: int32
-          example: 1600034400
+          $ref: '#/components/schemas/Timestamp'
         value:
           $ref: "#/components/schemas/Status"
+    Timestamp:
+      type: integer
+      format: int32
+      example: 1600034400
+      minimum: 0
+      description: seconds since epoch
